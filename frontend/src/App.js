@@ -240,32 +240,48 @@ const DadflixHome = ({
   searchQuery,
   setSearchQuery,
   currentSection,
-  setCurrentSection
+  setCurrentSection,
+  isMobileMenuOpen,
+  toggleMobileMenu
 }) => {
   return (
-    <div className="flex">
+    <div className="flex relative">
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={toggleMobileMenu}
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+        />
+      )}
+
       {/* Sidebar */}
       <Sidebar 
         isDarkMode={isDarkMode}
         currentSection={currentSection}
         setCurrentSection={setCurrentSection}
+        isMobileMenuOpen={isMobileMenuOpen}
+        toggleMobileMenu={toggleMobileMenu}
       />
       
       {/* Main Content */}
-      <div className="flex-1 ml-64">
+      <div className="flex-1 md:ml-64">
         {/* Header */}
         <Header 
           isDarkMode={isDarkMode}
           toggleTheme={toggleTheme}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          toggleMobileMenu={toggleMobileMenu}
         />
         
         {/* Hero Section */}
         <HeroSection isDarkMode={isDarkMode} />
         
         {/* Content Sections */}
-        <div className="px-8 pb-8 space-y-8">
+        <div className="px-4 md:px-8 pb-8 space-y-8">
           <PhotoCarousel
             title="Popular Photo Collections"
             collections={photoCollections.popular}
