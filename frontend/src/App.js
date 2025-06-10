@@ -436,6 +436,7 @@ const HeroSection = ({ isDarkMode }) => {
 // Photo Carousel Component
 const PhotoCarousel = ({ title, collections, onCollectionClick, isDarkMode }) => {
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [showArrows, setShowArrows] = useState(false);
   const carouselRef = React.useRef(null);
 
   const scroll = (direction) => {
@@ -449,18 +450,31 @@ const PhotoCarousel = ({ title, collections, onCollectionClick, isDarkMode }) =>
     setScrollPosition(newPosition);
   };
 
+  const handleFavoriteClick = (e, collectionId) => {
+    e.stopPropagation();
+    console.log('Added to favorites:', collectionId);
+    // Add favorite logic here
+  };
+
   return (
     <div className="space-y-4">
       <h3 className="text-2xl font-bold">{title}</h3>
-      <div className="relative group">
+      <div 
+        className="relative"
+        onMouseEnter={() => setShowArrows(true)}
+        onMouseLeave={() => setShowArrows(false)}
+      >
         {/* Left Arrow */}
         <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: showArrows ? 1 : 0 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={() => scroll('left')}
-          className={`absolute left-2 top-1/2 transform -translate-y-1/2 z-10 p-2 rounded-full ${
-            isDarkMode ? 'bg-black/70 text-white' : 'bg-white/70 text-gray-900'
-          } opacity-0 group-hover:opacity-100 transition-opacity`}
+          className={`absolute left-2 top-1/2 transform -translate-y-1/2 z-20 p-3 rounded-full ${
+            isDarkMode ? 'bg-black/80 text-white' : 'bg-white/90 text-gray-900'
+          } shadow-lg transition-all duration-200 hover:scale-110`}
+          style={{ pointerEvents: showArrows ? 'auto' : 'none' }}
         >
           <ChevronLeft size={24} />
         </motion.button>
@@ -468,7 +482,7 @@ const PhotoCarousel = ({ title, collections, onCollectionClick, isDarkMode }) =>
         {/* Carousel */}
         <div
           ref={carouselRef}
-          className="flex space-x-4 overflow-x-auto scrollbar-hide"
+          className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {collections.map((collection) => (
@@ -487,13 +501,13 @@ const PhotoCarousel = ({ title, collections, onCollectionClick, isDarkMode }) =>
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
               
               {/* Overlay Content */}
-              <div className="absolute bottom-0 left-0 right-0 p-4">
+              <div className="absolute bottom-0 left-0 right-0 p-4 pointer-events-none">
                 <h4 className="text-white font-semibold text-lg mb-1">{collection.title}</h4>
                 <p className="text-gray-300 text-sm">{collection.description}</p>
               </div>
               
               {/* Play Button */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                 <div className="bg-red-600 rounded-full p-3">
                   <Play className="text-white" size={24} />
                 </div>
@@ -501,11 +515,12 @@ const PhotoCarousel = ({ title, collections, onCollectionClick, isDarkMode }) =>
               
               {/* Add to Favorites */}
               <motion.button
-                whileHover={{ scale: 1.1 }}
+                whileHover={{ scale: 1.2 }}
                 whileTap={{ scale: 0.9 }}
-                className="absolute top-2 right-2 p-2 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={(e) => handleFavoriteClick(e, collection.id)}
+                className="absolute top-3 right-3 p-2 bg-black/70 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-red-600 z-10"
               >
-                <Heart className="text-white" size={16} />
+                <Heart size={18} fill="currentColor" />
               </motion.button>
             </motion.div>
           ))}
@@ -513,12 +528,15 @@ const PhotoCarousel = ({ title, collections, onCollectionClick, isDarkMode }) =>
 
         {/* Right Arrow */}
         <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: showArrows ? 1 : 0 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={() => scroll('right')}
-          className={`absolute right-2 top-1/2 transform -translate-y-1/2 z-10 p-2 rounded-full ${
-            isDarkMode ? 'bg-black/70 text-white' : 'bg-white/70 text-gray-900'
-          } opacity-0 group-hover:opacity-100 transition-opacity`}
+          className={`absolute right-2 top-1/2 transform -translate-y-1/2 z-20 p-3 rounded-full ${
+            isDarkMode ? 'bg-black/80 text-white' : 'bg-white/90 text-gray-900'
+          } shadow-lg transition-all duration-200 hover:scale-110`}
+          style={{ pointerEvents: showArrows ? 'auto' : 'none' }}
         >
           <ChevronRight size={24} />
         </motion.button>
