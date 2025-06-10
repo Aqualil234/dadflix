@@ -367,13 +367,27 @@ const Sidebar = ({ isDarkMode, currentSection, setCurrentSection, isMobileMenuOp
 };
 
 // Header Component
-const Header = ({ isDarkMode, toggleTheme, searchQuery, setSearchQuery }) => {
+const Header = ({ isDarkMode, toggleTheme, searchQuery, setSearchQuery, toggleMobileMenu }) => {
   return (
-    <div className={`flex items-center justify-between p-6 ${
+    <div className={`flex items-center justify-between p-4 md:p-6 ${
       isDarkMode ? 'bg-gray-900' : 'bg-white'
     } border-b ${isDarkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+      {/* Mobile Menu Button */}
+      <div className="md:hidden">
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={toggleMobileMenu}
+          className={`p-2 rounded-lg ${
+            isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-900'
+          }`}
+        >
+          <Grid3X3 size={24} />
+        </motion.button>
+      </div>
+
       {/* Search Bar */}
-      <div className="flex-1 max-w-2xl">
+      <div className="flex-1 max-w-2xl mx-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
           <input
@@ -391,7 +405,7 @@ const Header = ({ isDarkMode, toggleTheme, searchQuery, setSearchQuery }) => {
       </div>
       
       {/* User Profile & Theme Toggle */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-2 md:space-x-4">
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -403,13 +417,13 @@ const Header = ({ isDarkMode, toggleTheme, searchQuery, setSearchQuery }) => {
           {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
         </motion.button>
         
-        <div className="flex items-center space-x-3">
+        <div className="hidden md:flex items-center space-x-3">
           <img
             src="https://images.unsplash.com/photo-1641034189433-d2e405da28de"
             alt="Dad's Profile"
             className="w-10 h-10 rounded-full object-cover"
           />
-          <span className="font-medium">Dad's Profile</span>
+          <span className="font-medium hidden lg:block">Dad's Profile</span>
         </div>
       </div>
     </div>
