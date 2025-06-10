@@ -309,7 +309,7 @@ const DadflixHome = ({
 };
 
 // Sidebar Component
-const Sidebar = ({ isDarkMode, currentSection, setCurrentSection }) => {
+const Sidebar = ({ isDarkMode, currentSection, setCurrentSection, isMobileMenuOpen, toggleMobileMenu }) => {
   const menuItems = [
     { id: 'home', label: 'Home', icon: Home },
     { id: 'recent', label: 'Recently Added', icon: Clock },
@@ -318,12 +318,19 @@ const Sidebar = ({ isDarkMode, currentSection, setCurrentSection }) => {
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
 
+  const handleMenuItemClick = (itemId) => {
+    setCurrentSection(itemId);
+    toggleMobileMenu(); // Close mobile menu on item click
+  };
+
   return (
     <motion.div
       initial={{ x: -300 }}
-      animate={{ x: 0 }}
-      className={`fixed left-0 top-0 h-full w-64 p-6 z-30 ${
+      animate={{ x: isMobileMenuOpen ? 0 : 0 }}
+      className={`fixed left-0 top-0 h-full w-64 p-6 z-50 transition-transform duration-300 ${
         isDarkMode ? 'bg-black' : 'bg-white border-r border-gray-200'
+      } ${
+        isMobileMenuOpen ? 'translate-x-0' : 'md:translate-x-0 -translate-x-full'
       }`}
     >
       {/* Logo */}
@@ -340,7 +347,7 @@ const Sidebar = ({ isDarkMode, currentSection, setCurrentSection }) => {
               key={item.id}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setCurrentSection(item.id)}
+              onClick={() => handleMenuItemClick(item.id)}
               className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
                 currentSection === item.id
                   ? 'bg-red-600 text-white'
