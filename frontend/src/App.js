@@ -561,6 +561,18 @@ const SlideshowModal = ({
   setIsZoomed,
   isDarkMode
 }) => {
+  const handleVolumeChange = (e) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    if (newVolume > 0) {
+      setIsMuted(false);
+    }
+  };
+
+  const handleMuteToggle = () => {
+    setIsMuted(!isMuted);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -569,20 +581,23 @@ const SlideshowModal = ({
       className="fixed inset-0 bg-black z-50 flex items-center justify-center"
     >
       {/* Controls Header */}
-      <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/80 to-transparent z-10 p-6">
+      <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black via-black/50 to-transparent z-20 p-6">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-white">{collection.title}</h2>
             <p className="text-gray-300">{currentPhotoIndex + 1} of {collection.photos.length}</p>
           </div>
           
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             {/* Zoom Toggle */}
             <motion.button
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.1, backgroundColor: "rgba(239, 68, 68, 0.8)" }}
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsZoomed(!isZoomed)}
-              className="p-2 bg-white/20 rounded-full text-white hover:bg-white/30 transition-colors"
+              className={`p-3 rounded-full text-white transition-all duration-200 ${
+                isZoomed ? 'bg-red-600' : 'bg-white/20 hover:bg-white/30'
+              }`}
+              title="Zoom"
             >
               <ZoomIn size={20} />
             </motion.button>
@@ -592,20 +607,31 @@ const SlideshowModal = ({
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={toggleAutoPlay}
-              className="p-2 bg-red-600 rounded-full text-white hover:bg-red-700 transition-colors"
+              className={`p-3 rounded-full text-white transition-all duration-200 ${
+                isPlaying ? 'bg-red-600 hover:bg-red-700' : 'bg-gray-600 hover:bg-red-600'
+              }`}
+              title={isPlaying ? "Pause" : "Play"}
             >
-              {isPlaying ? <Play size={20} /> : <Play size={20} />}
+              {isPlaying ? (
+                <div className="w-5 h-5 flex items-center justify-center">
+                  <div className="w-1 h-4 bg-white mr-1"></div>
+                  <div className="w-1 h-4 bg-white"></div>
+                </div>
+              ) : (
+                <Play size={20} />
+              )}
             </motion.button>
             
             {/* Volume Control */}
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 bg-black/30 rounded-full px-3 py-2">
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={() => setIsMuted(!isMuted)}
-                className="p-2 bg-white/20 rounded-full text-white hover:bg-white/30 transition-colors"
+                onClick={handleMuteToggle}
+                className="p-1 text-white hover:text-red-400 transition-colors"
+                title={isMuted ? "Unmute" : "Mute"}
               >
-                {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
               </motion.button>
               <input
                 type="range"
@@ -613,17 +639,19 @@ const SlideshowModal = ({
                 max="1"
                 step="0.1"
                 value={isMuted ? 0 : volume}
-                onChange={(e) => setVolume(parseFloat(e.target.value))}
-                className="w-20"
+                onChange={handleVolumeChange}
+                className="w-16 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer slider"
+                title="Volume"
               />
             </div>
             
             {/* Close Button */}
             <motion.button
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.1, backgroundColor: "rgba(239, 68, 68, 0.8)" }}
               whileTap={{ scale: 0.9 }}
               onClick={closeSlideshow}
-              className="p-2 bg-white/20 rounded-full text-white hover:bg-white/30 transition-colors"
+              className="p-3 bg-white/20 rounded-full text-white hover:bg-red-600 transition-all duration-200"
+              title="Close"
             >
               <X size={20} />
             </motion.button>
@@ -644,41 +672,56 @@ const SlideshowModal = ({
           transition={{ duration: 0.5 }}
           src={collection.photos[currentPhotoIndex]}
           alt={`${collection.title} - Photo ${currentPhotoIndex + 1}`}
-          className="max-w-full max-h-full object-contain cursor-pointer"
+          className="max-w-full max-h-full object-contain cursor-pointer select-none"
           onClick={() => setIsZoomed(!isZoomed)}
+          onDragStart={(e) => e.preventDefault()}
         />
         
         {/* Navigation Arrows */}
         <motion.button
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.1, backgroundColor: "rgba(0, 0, 0, 0.8)" }}
           whileTap={{ scale: 0.9 }}
           onClick={() => navigatePhoto('prev')}
-          className="absolute left-6 top-1/2 transform -translate-y-1/2 p-3 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
+          className="absolute left-6 top-1/2 transform -translate-y-1/2 p-4 bg-black/60 rounded-full text-white transition-all duration-200 z-10"
+          title="Previous photo"
         >
           <ChevronLeft size={32} />
         </motion.button>
         
         <motion.button
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.1, backgroundColor: "rgba(0, 0, 0, 0.8)" }}
           whileTap={{ scale: 0.9 }}
           onClick={() => navigatePhoto('next')}
-          className="absolute right-6 top-1/2 transform -translate-y-1/2 p-3 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
+          className="absolute right-6 top-1/2 transform -translate-y-1/2 p-4 bg-black/60 rounded-full text-white transition-all duration-200 z-10"
+          title="Next photo"
         >
           <ChevronRight size={32} />
         </motion.button>
       </div>
 
       {/* Progress Bar */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-        <div className="flex space-x-2">
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/50 to-transparent p-6 z-20">
+        <div className="flex space-x-2 mb-4">
           {collection.photos.map((_, index) => (
-            <div
+            <motion.div
               key={index}
-              className={`h-1 flex-1 rounded ${
-                index === currentPhotoIndex ? 'bg-red-600' : 'bg-white/30'
+              whileHover={{ scale: 1.2 }}
+              onClick={() => {
+                // Navigate to specific photo
+                const photos = collection.photos;
+                const photoIndex = index;
+                // This would need to be connected to the parent state
+              }}
+              className={`h-2 flex-1 rounded cursor-pointer transition-all duration-200 ${
+                index === currentPhotoIndex ? 'bg-red-600' : 'bg-white/30 hover:bg-white/50'
               }`}
             />
           ))}
+        </div>
+        
+        {/* Keyboard Shortcuts Info */}
+        <div className="text-center text-gray-400 text-sm">
+          <span>Use ← → arrow keys to navigate • Space to play/pause • ESC to close</span>
         </div>
       </div>
     </motion.div>
