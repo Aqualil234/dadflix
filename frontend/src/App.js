@@ -433,7 +433,7 @@ const Header = ({ isDarkMode, toggleTheme, searchQuery, setSearchQuery, toggleMo
 // Hero Section Component
 const HeroSection = ({ isDarkMode }) => {
   return (
-    <div className="relative h-96 overflow-hidden">
+    <div className="relative h-64 md:h-96 overflow-hidden">
       <div 
         className="absolute inset-0 bg-cover bg-center"
         style={{
@@ -443,13 +443,13 @@ const HeroSection = ({ isDarkMode }) => {
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent" />
       </div>
       
-      <div className="relative z-10 flex items-center h-full px-8">
+      <div className="relative z-10 flex items-center h-full px-4 md:px-8">
         <div className="max-w-2xl">
           <motion.h2
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl font-bold mb-4"
+            className="text-3xl md:text-5xl font-bold mb-4"
           >
             Dad Life Chronicles
           </motion.h2>
@@ -457,7 +457,7 @@ const HeroSection = ({ isDarkMode }) => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl text-gray-200 mb-6"
+            className="text-lg md:text-xl text-gray-200 mb-6"
           >
             Capturing the epic moments, dad jokes, and family adventures that make life extraordinary.
           </motion.p>
@@ -467,7 +467,7 @@ const HeroSection = ({ isDarkMode }) => {
             transition={{ duration: 0.8, delay: 0.4 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+            className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-6 md:px-8 py-3 rounded-lg font-semibold transition-colors"
           >
             <Play size={20} />
             <span>Start Viewing</span>
