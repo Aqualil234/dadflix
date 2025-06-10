@@ -106,6 +106,7 @@ function App() {
   const [isZoomed, setIsZoomed] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentSection, setCurrentSection] = useState('home');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Keyboard navigation
   useEffect(() => {
@@ -161,6 +162,7 @@ function App() {
     setSelectedCollection(collection);
     setCurrentPhotoIndex(0);
     setIsPlaying(false);
+    setIsMobileMenuOpen(false); // Close mobile menu when opening slideshow
   };
 
   const closeSlideshow = () => {
@@ -176,6 +178,10 @@ function App() {
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   return (
@@ -194,6 +200,8 @@ function App() {
               setSearchQuery={setSearchQuery}
               currentSection={currentSection}
               setCurrentSection={setCurrentSection}
+              isMobileMenuOpen={isMobileMenuOpen}
+              toggleMobileMenu={toggleMobileMenu}
             />
           } />
         </Routes>
